@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto 3 SIG - Liberia</title>
+    <link href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet-src.js"></script>
+
+    <script src="https://unpkg.com/sql.js@0.3.2/js/sql.js"></script>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src="../Leaflet.TileLayer.MBTiles.js"></script>
+
+    <style>
+        body {
+            text-align: center;
+            overflow-y: scroll;
+            margin: 0;
+        }
+
+        #menu {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        #menu a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        #menu a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        #inicio,
+        #informacion-content,
+        #mi_mapa {
+            display: none;
+        }
+
+        #inicio img {
+            display: block;
+            margin: 20px auto;
+        }
+
+        #mapa-img,
+        #ciudades-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #mapa-img img,
+        #ciudad-imagen {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #mi_mapa {
+            height: 90vh;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="menu">
+        <a href="#" onclick="mostrarInicio()">Inicio</a>
+        <a href="#" onclick="mostrarInformacion()">Información de Liberia</a>
+        <a href="#" onclick="mostrarMapa()">Mapa Completo</a>
+    </div>
+    <div id="inicio">
+        <h1>Información</h1>
+        <p>Curso: Sistemas de Información Geográfica</p>
+        <p>Estudiantes: </p>
+        <p>Jennifer Alvarado Brenes - 2020124171</p>
+        <p>Hector Guillén Ramírez - 2019047572</p>
+        <p>Proyecto 3 - Cantón de Liberia</p>
+        <img src="liberiamap.jpg" alt="Mapa">
+    </div>
+    <div id="informacion-content">
+        <h1 style="text-align: center;">La capital de Guanacaste</h1>
+        <p>El cantón de Liberia también está ubicado en la provincia de Guanacaste, Costa Rica. Es conocido como "La Ciudad Blanca" debido a la arquitectura colonial de muchas de sus estructuras. Algunos puntos destacados de Liberia incluyen el Parque Nacional Rincón de la Vieja, que ofrece senderos, aguas termales y actividades al aire libre.</p>
+        <p>Liberia es un importante centro de transporte y puerta de entrada a las playas y parques nacionales de la región. El Aeropuerto Internacional Daniel Oduber Quirós, ubicado en Liberia, facilita el acceso a la zona y ha contribuido al crecimiento del turismo en Guanacaste.</p>
+        <p>La ciudad también alberga la Iglesia de la Ermita y la Iglesia de Guadalupe, que son lugares de interés histórico y arquitectónico. La cultura y la historia de Liberia se entrelazan con la rica herencia de Guanacaste, y la ciudad es un punto de partida ideal para explorar la belleza natural de la provincia.</p>
+        <img src="liberiaCiudad.jpg" alt="Centro de Liberia">
+    </div>
+    <div id="mi_mapa"></div>
+
+    <script>
+        let map = L.map('mi_mapa', {
+            center: [10.6394, -85.4407],
+            zoom: 12,
+            maxZoom: 18
+        });
+
+        var mb = L.tileLayer.mbTiles('./liberia_proyecto3_be0a65.mbtiles', {
+            minZoom: 12,
+            maxZoom: 18
+        }).addTo(map);
+
+        mb.on('databaseloaded', function(ev) {
+            console.info('MBTiles DB loaded', ev);
+        });
+        mb.on('databaseerror', function(ev) {
+            console.info('MBTiles DB error', ev);
+        });
+
+        function ocultarTodo() {
+            document.getElementById('inicio').style.display = 'none';
+            document.getElementById('informacion-content').style.display = 'none';
+            document.getElementById('mi_mapa').style.display = 'none';
+        }
+
+        function mostrarInicio() {
+            ocultarTodo();
+            document.getElementById('inicio').style.display = 'block';
+        }
+
+        function mostrarInformacion() {
+            ocultarTodo();
+            document.getElementById('informacion-content').style.display = 'block';
+        }
+
+        function mostrarMapa() {
+            ocultarTodo();
+            document.getElementById('mi_mapa').style.display = 'block';
+
+            // Forzar la actualización del tamaño del mapa después de que se haya hecho visible
+            map.invalidateSize();
+        }
+
+        // Mostrar la pantalla de Inicio al cargar la página
+        window.onload = function () {
+            mostrarInicio();
+        };
+    </script>
+</body>
+
+</html>
